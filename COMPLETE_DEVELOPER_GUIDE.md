@@ -1349,11 +1349,34 @@ class OrderProcessingIntegrationTest(TransactionTestCase):
 
 ### Railway.app Deployment
 
-#### 1. **Prepare for Deployment**
+#### 🚨 **FIXED: Port Number Error Solution**
+
+If you encounter `Error: '$PORT' is not a valid port number`, this has been resolved with the correct Procfile format.
+
+#### 1. **Prepare for Deployment (Updated)**
 
 ```bash
-# Procfile for Railway
-echo "web: gunicorn config.wsgi --bind 0.0.0.0:\$PORT" > Procfile
+# Use the automated Railway deployment script (Recommended)
+./scripts/deploy_railway.sh
+
+# This creates:
+# - Correct Procfile with proper PORT handling
+# - Updated requirements.txt
+# - railway.json configuration
+# - nixpacks.toml build configuration
+```
+
+**Manual Procfile Creation:**
+```bash
+# Correct Procfile for Railway (Method 1 - Recommended)
+echo "web: gunicorn config.wsgi:application --bind 0.0.0.0:\$PORT" > Procfile
+
+# Alternative Procfile formats for Railway:
+# Method 2: Using default port 8000 with PORT fallback
+echo "web: gunicorn config.wsgi:application --bind 0.0.0.0:\${PORT:-8000}" > Procfile
+
+# Method 3: Let Railway handle the binding
+echo "web: gunicorn config.wsgi:application" > Procfile
 
 # Requirements for production
 pip freeze > requirements.txt

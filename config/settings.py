@@ -112,45 +112,56 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database configuration with PostgreSQL as primary and MySQL as option
-DATABASE_ENGINE = os.environ.get('DATABASE_ENGINE', 'postgresql')
+# Database configuration with Railway support
+import dj_database_url
 
-if DATABASE_ENGINE == 'postgresql':
+# Railway DATABASE_URL support (takes priority)
+if 'DATABASE_URL' in os.environ:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('DB_NAME', 'cynthia-store'),
-            'USER': os.environ.get('DB_USER', 'neondb_owner'),
-            'PASSWORD': os.environ.get('DB_PASSWORD', 'npg_5fHunveBtjP2'),
-            'HOST': os.environ.get('DB_HOST', 'ep-empty-art-a8rvgyvj-pooler.eastus2.azure.neon.tech'),
-            'PORT': os.environ.get('DB_PORT', '5432'),
-            'OPTIONS': {
-                'connect_timeout': 10,
-            },
-        }
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
-elif DATABASE_ENGINE == 'mysql':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ.get('DB_NAME', 'cynthia_online_store'),
-            'USER': os.environ.get('DB_USER', 'root'),
-            'PASSWORD': os.environ.get('DB_PASSWORD', 'password'),
-            'HOST': os.environ.get('DB_HOST', 'localhost'),
-            'PORT': os.environ.get('DB_PORT', '3306'),
-            'OPTIONS': {
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-                'charset': 'utf8mb4',
-            },
+    # Connection pooling for Railway
+    DATABASES['default']['CONN_MAX_AGE'] = 60
+else:
+    # Database configuration with PostgreSQL as primary and MySQL as option
+    DATABASE_ENGINE = os.environ.get('DATABASE_ENGINE', 'postgresql')
+
+    if DATABASE_ENGINE == 'postgresql':
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': os.environ.get('DB_NAME', 'cynthia-store'),
+                'USER': os.environ.get('DB_USER', 'neondb_owner'),
+                'PASSWORD': os.environ.get('DB_PASSWORD', 'npg_5fHunveBtjP2'),
+                'HOST': os.environ.get('DB_HOST', 'ep-empty-art-a8rvgyvj-pooler.eastus2.azure.neon.tech'),
+                'PORT': os.environ.get('DB_PORT', '5432'),
+                'OPTIONS': {
+                    'connect_timeout': 10,
+                },
+            }
         }
-    }
-else:  # SQLite for development
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+    elif DATABASE_ENGINE == 'mysql':
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.mysql',
+                'NAME': os.environ.get('DB_NAME', 'cynthia_online_store'),
+                'USER': os.environ.get('DB_USER', 'root'),
+                'PASSWORD': os.environ.get('DB_PASSWORD', 'password'),
+                'HOST': os.environ.get('DB_HOST', 'localhost'),
+                'PORT': os.environ.get('DB_PORT', '3306'),
+                'OPTIONS': {
+                    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                    'charset': 'utf8mb4',
+                },
+            }
         }
-    }
+    else:  # SQLite for development
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

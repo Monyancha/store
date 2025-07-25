@@ -404,3 +404,34 @@ INFO 2025-07-25 14:26:52,536 autoreload 29011 132349334728960 /home/monyancha/De
 INFO 2025-07-25 14:26:53,123 autoreload 30340 123810418061568 Watching for file changes with StatReloader
 WARNING 2025-07-25 14:31:09,081 log 30340 123810311304896 Bad Request: /api/auth/login/
 WARNING 2025-07-25 14:31:09,082 basehttp 30340 123810311304896 "POST /api/auth/login/ HTTP/1.1" 400 44
+INFO 2025-07-25 15:02:19,219 autoreload 30340 123810418061568 /home/monyancha/Desktop/savannah-backend-assessment-main./savannah-backend-assessment-main/config/settings.py changed, reloading.
+INFO 2025-07-25 15:02:19,772 autoreload 33367 131314694856960 Watching for file changes with StatReloader
+INFO 2025-07-25 15:02:32,806 basehttp 33367 131314518849216 "GET /api HTTP/1.1" 301 0
+ERROR 2025-07-25 15:02:32,817 exceptions 33367 131314510456512 API Error: Authentication credentials were not provided. - Context: {'view': <rest_framework.routers.APIRootView object at 0x776e10667b60>, 'args': (), 'kwargs': {}, 'request': <rest_framework.request.Request: GET '/api/'>}
+WARNING 2025-07-25 15:02:32,857 log 33367 131314510456512 Unauthorized: /api/
+WARNING 2025-07-25 15:02:32,858 basehttp 33367 131314510456512 "GET /api/ HTTP/1.1" 401 5199
+INFO 2025-07-25 15:02:32,949 basehttp 33367 131314502063808 "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+INFO 2025-07-25 15:02:32,950 basehttp 33367 131314493671104 "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+INFO 2025-07-25 15:02:32,952 basehttp 33367 131314518849216 "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+INFO 2025-07-25 15:02:32,953 basehttp 33367 131314476885696 "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+INFO 2025-07-25 15:02:32,953 basehttp 33367 131314510456512 "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+INFO 2025-07-25 15:02:32,954 basehttp 33367 131314485278400 "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+INFO 2025-07-25 15:02:32,963 basehttp 33367 131314476885696 "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+INFO 2025-07-25 15:02:32,965 basehttp 33367 131314518849216 "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+INFO 2025-07-25 15:02:32,966 basehttp 33367 131314510456512 "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+INFO 2025-07-25 15:02:32,966 basehttp 33367 131314502063808 "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+INFO 2025-07-25 15:02:32,967 basehttp 33367 131314493671104 "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+INFO 2025-07-25 15:02:33,998 basehttp 33367 131314518849216 "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+INFO 2025-07-25 15:02:40,761 basehttp 33367 131314518849216 "GET /api-auth/login/?next=/api/ HTTP/1.1" 200 2705
+INFO 2025-07-25 15:02:47,635 basehttp 33367 131314518849216 "POST /api-auth/login/ HTTP/1.1" 302 0
+INFO 2025-07-25 15:02:53,682 basehttp 33367 131314518849216 "GET /api/ HTTP/1.1" 200 5717
+INFO 2025-07-25 15:02:53,802 basehttp 33367 131314120386240 "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+INFO 2025-07-25 15:02:53,804 basehttp 33367 131314111993536 "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+INFO 2025-07-25 15:02:53,808 basehttp 33367 131314095208128 "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+INFO 2025-07-25 15:02:53,808 basehttp 33367 131314086815424 "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+INFO 2025-07-25 15:02:53,809 basehttp 33367 131314128778944 "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+INFO 2025-07-25 15:02:53,811 basehttp 33367 131314103600832 "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+INFO 2025-07-25 15:02:53,814 basehttp 33367 131314120386240 "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+INFO 2025-07-25 15:03:08,012 basehttp 33367 131314518849216 "GET /api/?format=json HTTP/1.1" 200 2
+INFO 2025-07-25 15:08:21,419 autoreload 33367 131314694856960 /home/monyancha/Desktop/savannah-backend-assessment-main./savannah-backend-assessment-main/config/settings.py changed, reloading.
+INFO 2025-07-25 15:08:21,920 autoreload 33765 129186970689792 Watching for file changes with StatReloader
