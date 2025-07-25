@@ -103,7 +103,7 @@ python manage.py runserver
 
 ### 📚 API Documentation
 
-* Swagger/OpenAPI UI at `https://cynthia-store.up.railway.app/swagger`
+* Swagger/OpenAPI UI at `/swagger/` endpoint
 * Interactive testing & schema examples
 
 ---

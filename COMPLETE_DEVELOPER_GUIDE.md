@@ -686,15 +686,14 @@ def create_categories(self):
 ### 3. **CORS Configuration for Multiple Deployments**
 
 #### Challenge
-Supporting multiple deployment platforms (Railway, Vercel, local development) with proper CORS.
+Supporting multiple deployment platforms (Vercel, Heroku, local development) with proper CORS.
 
 #### Solution
 ```python
 # Dynamic CORS configuration
 CORS_ALLOWED_ORIGINS = [
-    "https://cynthia-store.up.railway.app",
-    "https://*.up.railway.app",
     "https://*.vercel.app",
+    "https://*.herokuapp.com",
     "http://localhost:3000",
     "http://localhost:8000",
 ]

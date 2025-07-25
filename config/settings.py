@@ -11,21 +11,18 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-key-for-development-o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-# Secure proxy header for Railway
+# Secure proxy header for production deployments
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Enhanced allowed hosts for multiple deployment platforms
 ALLOWED_HOSTS = [
-    '.up.railway.app',
     'localhost',
     '127.0.0.1',
     '0.0.0.0',
     'testserver',  # For Django testing
-    '.railway.app',
     '.vercel.app',
     '.herokuapp.com',
     '.ngrok.io',
-    'cynthia-store.up.railway.app',  # Explicit Railway URL
 ]
 
 # Add environment variable support
@@ -33,9 +30,6 @@ if os.environ.get('ALLOWED_HOSTS'):
     ALLOWED_HOSTS.extend(os.environ.get('ALLOWED_HOSTS').split(','))
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://cynthia-store.up.railway.app',
-    'https://*.up.railway.app',
-    'https://*.railway.app',
     'https://*.vercel.app',
     'https://*.herokuapp.com',
     'https://*.ngrok.io',
@@ -112,15 +106,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database configuration with Railway support
+# Database configuration with multiple platform support
 import dj_database_url
 
-# Railway DATABASE_URL support (takes priority)
+# DATABASE_URL support for deployment platforms (takes priority)
 if 'DATABASE_URL' in os.environ:
     DATABASES = {
         'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
-    # Connection pooling for Railway
+    # Connection pooling for production
     DATABASES['default']['CONN_MAX_AGE'] = 60
 else:
     # Database configuration with PostgreSQL as primary and MySQL as option
@@ -223,11 +217,8 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'apps.core.exceptions.custom_exception_handler',
 }
 
-# CORS settings - Enhanced for Railway deployment
+# CORS settings - Multiple platform support
 CORS_ALLOWED_ORIGINS = [
-    "https://cynthia-store.up.railway.app",
-    "https://*.up.railway.app",
-    "https://*.railway.app",
     "https://*.vercel.app",
     "https://*.herokuapp.com",
     "https://*.ngrok.io",
