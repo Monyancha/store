@@ -29,7 +29,7 @@
 - **Documentation**: drf-yasg (Swagger/OpenAPI)
 - **Caching**: Redis (Production), LocMem (Development)
 - **SMS Integration**: Africa's Talking API
-- **Deployment**: Railway.app, Docker, Vercel-compatible
+- **Deployment**: Docker, Vercel-compatible, Heroku
 
 ### Key Business Metrics
 - **Contact**: cynthy8samuels@gmail.com
@@ -382,7 +382,7 @@ OIDC_RP_CLIENT_SECRET=your_client_secret
 
 ### Base URL
 - **Local**: `http://localhost:8000/api/`
-- **Production**: `https://cynthia-store.up.railway.app/api/`
+- **Production**: `https://your-app.herokuapp.com/api/` or `https://your-app.vercel.app/api/`
 
 ### Authentication
 
@@ -1347,101 +1347,235 @@ class OrderProcessingIntegrationTest(TransactionTestCase):
 
 ## 🚀 Deployment Guide
 
-### Railway.app Deployment
-
-#### 🚨 **FIXED: Port Number Error Solution**
-
-If you encounter `Error: '$PORT' is not a valid port number`, this has been resolved with the correct Procfile format.
-
-#### 1. **Prepare for Deployment (Updated)**
-
-```bash
-# Use the automated Railway deployment script (Recommended)
-./scripts/deploy_railway.sh
-
-# This creates:
-# - Correct Procfile with proper PORT handling
-# - Updated requirements.txt
-# - railway.json configuration
-# - nixpacks.toml build configuration
-```
-
-**Manual Procfile Creation:**
-```bash
-# Correct Procfile for Railway (Method 1 - Recommended)
-echo "web: gunicorn config.wsgi:application --bind 0.0.0.0:\$PORT" > Procfile
-
-# Alternative Procfile formats for Railway:
-# Method 2: Using default port 8000 with PORT fallback
-echo "web: gunicorn config.wsgi:application --bind 0.0.0.0:\${PORT:-8000}" > Procfile
-
-# Method 3: Let Railway handle the binding
-echo "web: gunicorn config.wsgi:application" > Procfile
-
-# Requirements for production
-pip freeze > requirements.txt
-```
-
-#### 2. **Environment Variables (Railway)**
-
-```bash
-# Database (Railway will provide PostgreSQL)
-DATABASE_URL=postgresql://user:password@host:port/database
-
-# Django settings
-SECRET_KEY=your-production-secret-key
-DEBUG=False
-ALLOWED_HOSTS=cynthia-store.up.railway.app
-
-# Email configuration
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=cynthy8samuels@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
-
-# Africa's Talking SMS
-AFRICASTALKING_USERNAME=cynthia_store
-AFRICASTALKING_API_KEY=your-api-key
-```
-
-#### 3. **Production Settings**
-
-```python
-# config/settings.py - Production optimizations
-if not DEBUG:
-    # Security headers
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    
-    # Static files
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-    
-    # Database connection pooling
-    DATABASES['default']['CONN_MAX_AGE'] = 60
-```
-
 ### Docker Deployment
+
+#### 1. **Create Dockerfile**
 
 ```dockerfile
 FROM python:3.11-slim
 
 WORKDIR /app
 
+# Install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy project
 COPY . .
 
+# Collect static files
 RUN python manage.py collectstatic --noinput
 
+# Expose port
 EXPOSE 8000
 
+# Start server
 CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
+```
+
+#### 2. **Create docker-compose.yml**
+
+```yaml
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=False
+      - SECRET_KEY=your-secret-key
+      - DATABASE_URL=postgresql://user:password@db:5432/cynthia_store
+    depends_on:
+      - db
+    volumes:
+      - ./staticfiles:/app/staticfiles
+
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=cynthia_store
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+```
+
+#### 3. **Deploy with Docker**
+
+```bash
+# Build and run
+docker-compose up --build
+
+# Run migrations
+docker-compose exec web python manage.py migrate
+
+# Create superuser
+docker-compose exec web python manage.py createsuperuser
+
+# Load demo data
+docker-compose exec web python scripts/setup_demo_data.py
+```
+
+### Heroku Deployment
+
+#### 1. **Create Procfile**
+
+```bash
+echo "web: gunicorn config.wsgi:application --bind 0.0.0.0:\$PORT" > Procfile
+```
+
+#### 2. **Install Heroku CLI and Deploy**
+
+```bash
+# Install Heroku CLI
+# macOS: brew install heroku/brew/heroku
+# Ubuntu: sudo snap install heroku --classic
+
+# Login and create app
+heroku login
+heroku create your-app-name
+
+# Set environment variables
+heroku config:set SECRET_KEY=your-secret-key
+heroku config:set DEBUG=False
+heroku config:set ALLOWED_HOSTS=your-app-name.herokuapp.com
+
+# Add PostgreSQL
+heroku addons:create heroku-postgresql:hobby-dev
+
+# Deploy
+git add .
+git commit -m "Deploy to Heroku"
+git push heroku main
+
+# Run migrations
+heroku run python manage.py migrate
+heroku run python scripts/setup_demo_data.py
+```
+
+### Vercel Deployment
+
+#### 1. **Create vercel.json**
+
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "config/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "config/wsgi.py"
+    }
+  ],
+  "env": {
+    "SECRET_KEY": "@secret_key",
+    "DEBUG": "False"
+  }
+}
+```
+
+#### 2. **Deploy to Vercel**
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel
+
+# Set environment variables in Vercel dashboard
+# - SECRET_KEY
+# - DEBUG=False
+# - DATABASE_URL (use external PostgreSQL)
+```
+
+### Production Environment Variables
+
+```bash
+# Core Django Settings
+SECRET_KEY=your-production-secret-key-here
+DEBUG=False
+ALLOWED_HOSTS=your-domain.com,www.your-domain.com
+
+# Database (for external PostgreSQL)
+DATABASE_URL=postgresql://user:password@host:port/database
+
+# Or individual database settings
+DB_NAME=cynthia_store_prod
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_HOST=your_db_host
+DB_PORT=5432
+
+# Email Configuration
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
+
+# SMS Configuration (Africa's Talking)
+AFRICASTALKING_USERNAME=your_username
+AFRICASTALKING_API_KEY=your_api_key
+AFRICASTALKING_SENDER=YourSender
+
+# Redis Cache (optional)
+REDIS_URL=redis://your-redis-host:6379/1
+```
+
+### Production Checklist
+
+#### ✅ **Security**
+- [ ] `DEBUG=False` in production
+- [ ] Strong `SECRET_KEY` (50+ characters)
+- [ ] Proper `ALLOWED_HOSTS` configuration
+- [ ] HTTPS redirect enabled
+- [ ] Secure cookie settings
+- [ ] Database credentials secured
+
+#### ✅ **Performance**
+- [ ] Static files served efficiently
+- [ ] Database connection pooling
+- [ ] Redis caching configured
+- [ ] Gzip compression enabled
+- [ ] Database indexes optimized
+
+#### ✅ **Monitoring**
+- [ ] Logging configured
+- [ ] Error tracking setup
+- [ ] Performance monitoring
+- [ ] Database backup strategy
+- [ ] Health check endpoints
+
+### Quick Deployment Commands
+
+```bash
+# Check deployment readiness
+python manage.py check --deploy
+
+# Collect static files
+python manage.py collectstatic --noinput
+
+# Run migrations
+python manage.py migrate
+
+# Test production settings locally
+export DEBUG=False
+export SECRET_KEY=test-key
+python manage.py runserver
+
+# Load demo data
+python scripts/setup_demo_data.py
 ```
 
 ---
@@ -1454,9 +1588,10 @@ CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
 **Location**: Nairobi, Kenya
 
 ### Quick Links
-- **API Documentation**: https://cynthia-store.up.railway.app/swagger/
-- **Admin Panel**: https://cynthia-store.up.railway.app/admin/
-- **Health Check**: https://cynthia-store.up.railway.app/health/
+- **Local Development**: http://localhost:8000/
+- **API Documentation**: http://localhost:8000/swagger/
+- **Admin Panel**: http://localhost:8000/admin/
+- **Health Check**: http://localhost:8000/health/
 
 ---
 

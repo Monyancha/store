@@ -435,3 +435,8 @@ INFO 2025-07-25 15:02:53,814 basehttp 33367 131314120386240 "GET /static/rest_fr
 INFO 2025-07-25 15:03:08,012 basehttp 33367 131314518849216 "GET /api/?format=json HTTP/1.1" 200 2
 INFO 2025-07-25 15:08:21,419 autoreload 33367 131314694856960 /home/monyancha/Desktop/savannah-backend-assessment-main./savannah-backend-assessment-main/config/settings.py changed, reloading.
 INFO 2025-07-25 15:08:21,920 autoreload 33765 129186970689792 Watching for file changes with StatReloader
+INFO 2025-07-25 15:13:53,655 autoreload 33765 129186970689792 /home/monyancha/Desktop/savannah-backend-assessment-main./savannah-backend-assessment-main/config/settings.py changed, reloading.
+INFO 2025-07-25 15:13:54,260 autoreload 34539 124885328408832 Watching for file changes with StatReloader
+INFO 2025-07-25 15:14:17,140 autoreload 34539 124885328408832 /home/monyancha/Desktop/savannah-backend-assessment-main./savannah-backend-assessment-main/config/settings.py changed, reloading.
+INFO 2025-07-25 15:14:17,586 autoreload 34614 127432446677248 Watching for file changes with StatReloader
+INFO 2025-07-25 15:16:58,903 autoreload 34614 127432446677248 /home/monyancha/Desktop/savannah-backend-assessment-main./savannah-backend-assessment-main/config/settings.py changed, reloading.
