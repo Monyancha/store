@@ -1,0 +1,68 @@
+{
+  "local": {
+    "python_version": "3.11",
+    "database": "sqlite",
+    "redis_required": false,
+    "static_files": true,
+    "migrations": true,
+    "fixtures": true,
+    "environment_variables": {
+      "DEBUG": "True",
+      "SECRET_KEY": "django-insecure-local-development-key",
+      "BUSINESS_NAME": "Cynthia Online Store",
+      "BUSINESS_EMAIL": "cynthy8samuels@gmail.com",
+      "BUSINESS_PHONE": "+254798534856",
+      "ADMIN_EMAIL": "cynthy8samuels@gmail.com"
+    }
+  },
+  "docker": {
+    "python_version": "3.11",
+    "database": "postgresql",
+    "redis_required": true,
+    "static_files": true,
+    "migrations": true,
+    "fixtures": true,
+    "environment_variables": {
+      "DEBUG": "False",
+      "DATABASE_ENGINE": "postgresql",
+      "BUSINESS_NAME": "Cynthia Online Store",
+      "BUSINESS_EMAIL": "cynthy8samuels@gmail.com",
+      "BUSINESS_PHONE": "+254798534856",
+      "ADMIN_EMAIL": "cynthy8samuels@gmail.com"
+    }
+  },
+  "kubernetes": {
+    "python_version": "3.11",
+    "database": "postgresql",
+    "redis_required": true,
+    "static_files": true,
+    "migrations": true,
+    "fixtures": false,
+    "namespace": "cynthia-store",
+    "helm_chart": "./charts/store-chart",
+    "environment_variables": {
+      "DEBUG": "False",
+      "DATABASE_ENGINE": "postgresql",
+      "BUSINESS_NAME": "Cynthia Online Store",
+      "BUSINESS_EMAIL": "cynthy8samuels@gmail.com",
+      "BUSINESS_PHONE": "+254798534856",
+      "ADMIN_EMAIL": "cynthy8samuels@gmail.com"
+    }
+  },
+  "github": {
+    "python_version": "3.11",
+    "database": "postgresql",
+    "redis_required": true,
+    "static_files": true,
+    "migrations": true,
+    "fixtures": false,
+    "environment_variables": {
+      "DEBUG": "False",
+      "DATABASE_ENGINE": "postgresql",
+      "BUSINESS_NAME": "Cynthia Online Store",
+      "BUSINESS_EMAIL": "cynthy8samuels@gmail.com",
+      "BUSINESS_PHONE": "+254798534856",
+      "ADMIN_EMAIL": "cynthy8samuels@gmail.com"
+    }
+  }
+}
